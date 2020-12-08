@@ -1,4 +1,4 @@
-package homeWork_4;
+package homeWork_5;
 
 import java.util.Objects;
 
@@ -11,6 +11,12 @@ public class Person implements Comparable<Person> {
         this.name = name;
         this.surname = surname;
         this.age = age;
+    }
+
+    public Person(Person person) {
+        this.name = person.name;
+        this.surname = person.surname;
+        this.age = person.age;
     }
 
     public Person() {
@@ -33,8 +39,7 @@ public class Person implements Comparable<Person> {
             return age == person.age &&
                     Objects.equals(name, person.name) &&
                     Objects.equals(surname, person.surname);
-        }
-        else{
+        } else {
             return false;
         }
     }
@@ -61,17 +66,9 @@ public class Person implements Comparable<Person> {
                 return (int) result / Math.abs(result);
             }
             return 0;
-        }
-        else{
+        } else {
             return 1;
         }
-    }
-
-    //объединяем имя
-    public void connotation(Person person) {
-        this.surname = this.surname + " + " + person.surname;
-        this.name = this.name + " + " + person.name;
-        this.age = this.age + person.age;
     }
 
     public void setPerson(Person person) {
