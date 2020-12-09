@@ -2,7 +2,7 @@ package homeWork_5;
 
 import java.util.Objects;
 
-public class Person implements Comparable<Person> {
+public class Person<person> implements Comparable<Person> {
     private String name;
     private String surname;
     private int age;
@@ -27,7 +27,7 @@ public class Person implements Comparable<Person> {
 
     @Override
     public String toString() {
-        return surname + " " + name + ", " + age + "  ";
+        return name + " " + surname + ", " + age + "  ";
     }
 
     @Override
@@ -50,20 +50,15 @@ public class Person implements Comparable<Person> {
     }
 
     @Override
-    //сортировка сначала по Фамилии, затем по Имени и окончательно по возрасту
     public int compareTo(Person person) {
         if (person != null) {
-            int result = this.surname.compareTo(person.surname);
+            int result = this.name.compareTo(person.name);
             if (result != 0) {
                 return result;
             }
-            result = this.name.compareTo(person.name);
+            result = this.surname.compareTo(person.surname);
             if (result != 0) {
                 return result;
-            }
-            result = this.age - person.age;
-            if (result != 0) {
-                return (int) result / Math.abs(result);
             }
             return 0;
         } else {
@@ -88,4 +83,5 @@ public class Person implements Comparable<Person> {
     public int getAge() {
         return this.age;
     }
+
 }
