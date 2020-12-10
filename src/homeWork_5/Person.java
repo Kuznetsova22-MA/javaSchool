@@ -1,4 +1,4 @@
-package homeWork_4;
+package homeWork_5;
 
 import java.util.Objects;
 
@@ -13,6 +13,12 @@ public class Person implements Comparable<Person> {
         this.age = age;
     }
 
+    public Person(Person person) {
+        this.name = person.name;
+        this.surname = person.surname;
+        this.age = person.age;
+    }
+
     public Person() {
         this.name = "";
         this.surname = "";
@@ -21,7 +27,7 @@ public class Person implements Comparable<Person> {
 
     @Override
     public String toString() {
-        return surname + " " + name + ", " + age + "  ";
+        return name + " " + surname + ", " + age + "  ";
     }
 
     @Override
@@ -33,8 +39,7 @@ public class Person implements Comparable<Person> {
             return age == person.age &&
                     Objects.equals(name, person.name) &&
                     Objects.equals(surname, person.surname);
-        }
-        else{
+        } else {
             return false;
         }
     }
@@ -45,33 +50,20 @@ public class Person implements Comparable<Person> {
     }
 
     @Override
-    //сортировка сначала по Фамилии, затем по Имени и окончательно по возрасту
     public int compareTo(Person person) {
         if (person != null) {
-            int result = this.surname.compareTo(person.surname);
+            int result = this.name.compareTo(person.name);
             if (result != 0) {
                 return result;
             }
-            result = this.name.compareTo(person.name);
+            result = this.surname.compareTo(person.surname);
             if (result != 0) {
                 return result;
-            }
-            result = this.age - person.age;
-            if (result != 0) {
-                return (int) result / Math.abs(result);
             }
             return 0;
-        }
-        else{
+        } else {
             return 1;
         }
-    }
-
-    //объединяем имя
-    public void connotation(Person person) {
-        this.surname = this.surname + " + " + person.surname;
-        this.name = this.name + " + " + person.name;
-        this.age = this.age + person.age;
     }
 
     public void setPerson(Person person) {
@@ -91,4 +83,5 @@ public class Person implements Comparable<Person> {
     public int getAge() {
         return this.age;
     }
+
 }
