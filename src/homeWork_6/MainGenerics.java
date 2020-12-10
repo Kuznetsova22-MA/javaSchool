@@ -18,27 +18,33 @@ public class MainGenerics {
     }
 
     public static void main(String[] args) throws MyException {
-        List<Person> list = new ArrayList<>();
+        List<Person> list1 = new ArrayList<>();
+        List<Person> list2 = new ArrayList<>();
+        list2 = null;
 
-        list.add(new IdentifierPerson("MARIA", "KUZNETSOVA", 18));
-        list.add(new BillPerson("YANA", "KUZNETSOVA", 48, LocalDate.now(), 89.5));
-        list.add(new Person("IVAN", "IVANOV", 88));
-        list.add(new Person("M***", "K***", 15));
-        list.add(new Person("STEPAN", "IVANOV", 118));
+        list1.add(new IdentifierPerson("MARIA", "KUZNETSOVA", 18));
+        list1.add(new BillPerson("YANA", "KUZNETSOVA", 48, LocalDate.now(), 89.5));
+        list1.add(new Person("IVAN", "IVANOV", 88));
+        list1.add(new Person("M***", "K***", 15));
+        list1.add(new Person("STEPAN", "IVANOV", 118));
 
-        showList(list);
+        //showList(list);
         CollectionsWithPerson yang = new CollectionsWithPerson();
         try {
-            //System.out.println(yang.youngPerson(list));
-            System.out.println(yang.oldPersonIdentification(list));
-        } catch (MyException | NoSuchElementException e) {
-            System.out.println(e.getMessage());
-            System.out.println("/////////////");
+            System.out.println(yang.youngPerson(list2));
+        } catch (MyException e) {
+            System.out.println(e.getClass().getSimpleName() + ":  " + e.getMessage());
         }
-        finally {
-            System.out.println("***************************");
+        try {
+            System.out.println(yang.olderPersonIdentification(list2));
+        } catch (MyException | NoSuchElementException e) {
+            System.out.println(e.getClass().getSimpleName() + ":  " + e.getMessage());
         }
 
-       // System.out.println(yang.oldPersonIdentification(list));
+        try {
+            System.out.println(yang.olderPersonIdentification(list1));
+        } catch (MyException | NoSuchElementException e) {
+            System.out.println(e.getClass().getSimpleName() + ":  " + e.getMessage());
+        }
     }
 }
