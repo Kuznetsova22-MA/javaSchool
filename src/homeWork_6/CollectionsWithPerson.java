@@ -26,7 +26,7 @@ public class CollectionsWithPerson {
     }
 
     //Создать метод, который принимает коллекцию, элементы которой могут быть только Client и созданный ранее класс с идентификатором.
-    public Person olderPersonIdentification(Collection<? extends Person> collection) throws MyException,  NoSuchElementException {
+    public Person olderPersonIdentification(Collection<? extends Person> collection) throws MyException {
         Person olderPerson = null;
         int age = 0;
         if (collection == null || collection.isEmpty()) {

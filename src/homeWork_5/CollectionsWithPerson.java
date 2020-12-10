@@ -8,13 +8,12 @@ public class CollectionsWithPerson {
     //(т.е. как минимум предыдущие три класса).
     public Person youngPerson(Collection<? extends Person> collection) {
         Person yangPerson = null;
-        if(collection!= null && !collection.isEmpty()) {
-            Iterator<Person> iterator = (Iterator<Person>) collection.iterator();
-            Person p = iterator.next();
-            yangPerson = p;
-            int age = p.getAge();
-            while (iterator.hasNext()) {
-                p = iterator.next();
+        if (collection == null || collection.isEmpty()) {
+            return yangPerson;
+        } else {
+            yangPerson = collection.iterator().next();
+            int age = yangPerson.getAge();
+            for (Person p : collection) {
                 if (p.getAge() < age) {
                     age = p.getAge();
                     yangPerson = p;
@@ -23,22 +22,22 @@ public class CollectionsWithPerson {
         }
         return yangPerson;
     }
+
     //Создать метод, который принимает коллекцию, элементы которой могут быть только Client и созданный ранее класс с идентификатором.
-    public Person oldPersonIdentification(Collection<? super IdentifierPerson> collection){
-        Person yangPerson = null;
-        if(collection!= null && !collection.isEmpty()) {
-            Iterator<Person> iterator = (Iterator<Person>) collection.iterator();
-            Person p = iterator.next();
-            yangPerson = p;
-            int age = p.getAge();
-            while (iterator.hasNext()) {
-                p = iterator.next();
+    public Person olderPersonIdentification(Collection<? extends Person> collection) {
+        Person olderPerson = null;
+        int age = 0;
+        if (collection == null || collection.isEmpty()) {
+            return olderPerson;
+        } else {
+            for (Person p : collection) {
                 if (p.getAge() > age) {
                     age = p.getAge();
-                    yangPerson = p;
+                    olderPerson = p;
                 }
             }
+            return olderPerson;
         }
-        return yangPerson;
+
     }
 }

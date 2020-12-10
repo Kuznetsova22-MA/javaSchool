@@ -27,6 +27,6 @@ public class MainGenerics {
         CollectionsWithPerson yang = new CollectionsWithPerson();
 
         System.out.println(yang.youngPerson(list));
-        System.out.println(yang.oldPersonIdentification(list));
+        System.out.println(yang.olderPersonIdentification(list));
     }
 }

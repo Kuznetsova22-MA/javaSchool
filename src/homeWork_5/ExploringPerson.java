@@ -3,16 +3,18 @@ package homeWork_5;
 import java.util.*;
 
 //Один ищет клиента с максимальным количеством букв в имени, и сортирует в выбранном вами порядке по имени и т.д.
-public class ExploringPerson implements NewType<Person> {
+public class ExploringPerson implements MethodsForCollection<Person> {
     @Override
     public Person max(Collection<Person> collection) {
         int maxName = 0;
         Person person = null;
         if (collection != null && !collection.isEmpty()) {
             for (Person p : collection) {
-                if (p.getName().length() > maxName) {
-                    maxName = p.getName().length();
-                    person = p;
+                if (p != null) {
+                    if (p.getName().length() > maxName) {
+                        maxName = p.getName().length();
+                        person = p;
+                    }
                 }
             }
         }
@@ -24,7 +26,9 @@ public class ExploringPerson implements NewType<Person> {
         double middleName = 0;
         if (collection != null && !collection.isEmpty()) {
             for (Person p : collection) {
-                middleName += p.getName().length();
+                if (p != null) {
+                    middleName += p.getName().length();
+                }
             }
             middleName /= collection.size();
         }

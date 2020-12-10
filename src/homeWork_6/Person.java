@@ -2,7 +2,7 @@ package homeWork_6;
 
 import java.util.Objects;
 
-public class Person<person> implements Comparable<Person> {
+public class Person implements Comparable<Person> {
     private String name;
     private String surname;
     private int age;
