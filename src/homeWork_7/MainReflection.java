@@ -11,10 +11,31 @@ import java.util.*;
 import static java.lang.Class.*;
 
 public class MainReflection {
+    private static <T> boolean isSuperClass(Class<T> clazz, String superClassName) {
+        Class superclass = null;
+        superclass = clazz.getSuperclass();
+        if (clazz.getSimpleName().endsWith(superClassName)) {
+            return true;
+        } else {
+            boolean isSuperclass = false;
+            while (!isSuperclass) {
+                if (superclass != null) {
+                    isSuperclass = superclass.getSimpleName().endsWith(superClassName);
+                    superclass = superclass.getSuperclass();
+                } else {
+                    return false;
+                }
+            }
+            return isSuperclass;
+        }
+    }
+
     private static <T> void reflectionClassPackage(Class<T> clazz) {
         Package packageClass = null;
         Class superclass = null;
-        String packageClassName, className, packageName;
+        String packageClassName;
+        String className;
+        String packageName;
         int modifierClass;
 
         packageClassName = clazz.getName();
@@ -73,26 +94,24 @@ public class MainReflection {
     private static <T> void reflectionFields(Class<T> clazz) {
         Field[] fields = null;
         fields = clazz.getDeclaredFields();
-        Class superclass = clazz.getSuperclass();
 
         System.out.println("Список всех полей, в том числе приватных, включая их тип:");
         if (fields.length > 0) {
             for (int i = 0; i < fields.length; i++) {
-                if (fields[i].getType() == Collection.class || fields[i].getType() == Map.class) {
-                    System.out.println(Modifier.toString(fields[i].getModifiers()) + "  " + fields[i].getGenericType() + "  " + fields[i].getName());
-                } else {
+                if (fields[i].getType().isPrimitive() || fields[i].getType() == clazz || fields[i].getType().isArray() || fields[i].getType().isInterface()) {
                     System.out.println(Modifier.toString(fields[i].getModifiers()) + "  " + fields[i].getType() + "  " + fields[i].getName());
-                }
-                if (!fields[i].getType().isPrimitive() && fields[i].getType() != String.class && fields[i].getType() != Object.class && fields[i].getType() != clazz && fields[i].getType() != Collection.class && fields[i].getType() == Map.class && superclass != null) {
+                } else if (isSuperClass(fields[i].getType(), Collection.class.getSimpleName()) && isSuperClass(fields[i].getType(), Map.class.getSimpleName())) {
                     System.out.println("******************************************************************************");
                     reflectionAboutClass(fields[i].getType());
                     System.out.println("******************************************************************************");
+                } else if (isSuperClass(fields[i].getType(), Collection.class.getSimpleName()) || isSuperClass(fields[i].getType(), Map.class.getSimpleName())) {
+                    System.out.println(Modifier.toString(fields[i].getModifiers()) + "  " + fields[i].getGenericType() + "  " + fields[i].getName());
                 }
             }
+            System.out.println("==============================================================================");
         }
-        System.out.println("==============================================================================");
-
     }
+
 
     private static <T> void reflectionMethods(Class<T> clazz) {
         Parameter[] parameters = null;
@@ -104,29 +123,38 @@ public class MainReflection {
             for (int i = 0; i < methods.length; i++) {
                 System.out.print(Modifier.toString(methods[i].getModifiers()) + "  " + methods[i].getReturnType() + "  " + methods[i].getName() + "(");
                 parameters = methods[i].getParameters();
+                List<Parameter> parameterClass = new ArrayList<>();
                 if (parameters.length > 0) {
                     for (int j = 0; j < parameters.length; j++) {
                         System.out.print(parameters[j].getType() + " " + parameters[j].getName() + "  ");
+                        if (!parameters[j].getType().isPrimitive() && parameters[j].getType() != clazz && !parameters[j].getType().isArray() && !parameters[j].getType().isInterface()) {
+                            if (!isSuperClass(parameters[j].getType(), Collection.class.getSimpleName()) && !isSuperClass(parameters[j].getType(), Map.class.getSimpleName())) {
+                                parameterClass.add(parameters[j]);
+                            }
+                        }
                     }
                 }
                 System.out.print(")");
                 System.out.println();
-                if (parameters.length > 0) {
-                    for (int j = 0; j < parameters.length; j++) {
-                        if (!parameters[j].getType().isPrimitive() && parameters[j].getType() != String.class && parameters[j].getType() != Object.class && parameters[j].getType() != clazz && parameters[j].getType() != Collection.class && parameters[j].getType() != Map.class) {
-                            System.out.println("******************************************************************************");
-                            reflectionAboutClass(parameters[j].getType());
-                            System.out.println("******************************************************************************");
-                        }
+
+               /* if (parameterClass.size() > 0) {
+                    System.out.println(" parameterClass.size() =" + parameterClass.size() + "  " + parameterClass);
+                    for (Parameter p : parameterClass) {
+                        System.out.println("******************************************************************************");
+                        reflectionAboutClass(p.getType());
+                        System.out.println("******************************************************************************");
                     }
-                }
+
+                }*/
+
             }
         }
+
         System.out.println("==============================================================================");
 
     }
 
-    private static <T> void reflectionAboutClass(Class<T> clazz) {
+    public static <T> void reflectionAboutClass(Class<T> clazz) {
         reflectionClassPackage(clazz);
         reflectionInterfaces(clazz);
         reflectionConstructors(clazz);
@@ -136,8 +164,11 @@ public class MainReflection {
 
     public static void main(String[] args) {
 
-       /* IdentifierPerson idPerson = new IdentifierPerson("Petr", "Petrov", 5);
+        IdentifierPerson idPerson = new IdentifierPerson("Petr", "Petrov", 5);
         reflectionAboutClass(idPerson.getClass());
+        BillPerson billPerson = new BillPerson("YANA", "KUZNETSOVA", 48, LocalDate.now(), 89.5);
+        reflectionAboutClass(billPerson.getClass());
+        reflectionMethods(java.lang.StringBuffer.class);
         List<Person> list1 = new ArrayList<>();
         list1.add(new IdentifierPerson("MARIA", "KUZNETSOVA", 18));
         list1.add(new Person("IVAN", "IVANOV", 88));
@@ -146,9 +177,7 @@ public class MainReflection {
 
         ReflectionTest test = new ReflectionTest(new Person("M***", "K***", 15), 7, list1);
 
-        reflectionAboutClass(test.getClass());*/
-        BillPerson billPerson = new BillPerson("YANA", "KUZNETSOVA", 48, LocalDate.now(), 89.5);
-        reflectionAboutClass(billPerson.getClass());
+        reflectionAboutClass(test.getClass());
 
 
     }

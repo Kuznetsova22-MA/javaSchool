@@ -14,7 +14,7 @@ public class ReflectionTest<T> {
         this.collection = collection;
     }
 
-    public void showList(Collection<T> c) {
+    public void showList(int[] a) {
         int i = 1;
         for (T l : this.collection) {
             System.out.println(i + ") " + l);
